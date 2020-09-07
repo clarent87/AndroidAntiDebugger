@@ -122,7 +122,8 @@ FORKLABEL:
             }
         } while (!sflag[6]);
         LOGD("read decoded data success!!");
-        pthread_create(&ntid, nullptr, child_attach_thread, &pid); // pid는 thread의 arg
+        // pid는 thread의 arg => 이부분 bug있음 pid 전역으로 해서 주소 넘겨야지.. 안그러면 parent 의 checkDebugger함수 바로 종료후 스택의 pid에 가비지
+        pthread_create(&ntid, nullptr, child_attach_thread, &pid); 
     }
     else
     {
@@ -322,6 +323,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
         return -1;
     }
 
+    // java 단에 jni 쓰는 class가 두개라 각각 등록
     {
         auto clazz = env->FindClass("f8left/cm2/App");
         if (clazz == nullptr)
@@ -336,7 +338,8 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved)
         }
         env->DeleteLocalRef(clazz);
     }
-
+    
+    // java 단에 jni 쓰는 class가 두개라 각각 등록
     {
         auto clazz = env->FindClass("f8left/cm2/MainActivity");
         if (clazz == nullptr)
