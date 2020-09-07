@@ -88,7 +88,7 @@ FORKLABEL:
         return 0;
     }
     auto pid = fork();
-    prctl(PR_SET_DUMPABLE, 1); // 덤퍼블이 아닌건 ptrace attach도 안됀다고 함, 일단 1로 세팅한건 dump가능
+    prctl(PR_SET_DUMPABLE, 1); // 덤퍼블이 아닌건 ptrace attach도 안됀다고 함, 일단 1로 세팅한건 dump가능 ( ptrace_Scope때문인가.. 실제론 안먹힘 )
 
     if (pid != 0)
     {
